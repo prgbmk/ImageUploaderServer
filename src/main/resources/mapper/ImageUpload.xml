@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mgpark.imageserver.mapper.ImageUploadMapper">
+
+    <select id="getAllTypeList" parameterType="map" resultType="TbImageTypeVo">
+        SELECT *
+        FROM imagetype
+        ORDER BY SN DESC
+    </select>
+
+    <select id="selectImage" parameterType="map" resultType="TbImageTableVo">
+        SELECT *
+        FROM imagetable
+        WHERE TYPE = #{TYPE}
+        AND FILENAME = #{FILENAME}
+    </select>
+
+    <select id="selectImageList" parameterType="map" resultType="TbImageTableVo">
+        SELECT *
+        FROM imagetable
+        WHERE TYPE = #{TYPE}
+    </select>
+
+    <select id="existImageType" parameterType="map" resultType="boolean">
+        SELECT IF(COUNT(SN) > 0, TRUE, FALSE)
+        FROM imagetype
+        WHERE TYPE = #{TYPE}
+    </select>
+
+    <select id="existImage" parameterType="map" resultType="boolean">
+        SELECT IF(COUNT(SN) > 0, TRUE, FALSE)
+        FROM imagetable
+        WHERE TYPE = #{TYPE}
+        AND FILENAME = #{FILENAME}
+    </select>
+
+    <insert id="insertNewImageType" parameterType="map" useGeneratedKeys="true" keyProperty="SN">
+        INSERT INTO imagetype
+        VALUES (
+            #{SN},
+            #{TYPE}
+        )
+    </insert>
+
+    <insert id="insertImage" parameterType="map" useGeneratedKeys="true" keyProperty="SN">
+        INSERT INTO imagetable
+        VALUES (
+                #{SN},
+                #{TYPE},
+                #{FILENAME},
+                #{DIR},
+                #{DESCRIPTION}
+        )
+    </insert>
+    
+    <delete id="deleteImage" parameterType="map">
+        DELETE FROM imagetable
+        WHERE TYPE = #{TYPE}
+        AND FILENAME = #{FILENAME}
+    </delete>
+
+</mapper>
